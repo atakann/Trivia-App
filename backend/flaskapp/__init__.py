@@ -10,7 +10,10 @@ from models import setup_db, Question, Category
 QUESTIONS_PER_PAGE = 10
 
 def create_app(test_config=None):
-    # create and configure the app
+    """
+    Initializes and configures the Flask app, setting up CORS and the database connection.
+    :param test_config
+    """
     app = Flask(__name__)
     setup_db(app)
 
@@ -136,7 +139,7 @@ def create_app(test_config=None):
     only question that include that string within their question.
     Try using the word "title" to start.
     """
-    @app.route('questions/search', methods=['POST'])
+    @app.route('/questions/search', methods=['POST'])
     def search_questions():
         body = request.get_json()
         search_term = body.get('searchTerm', '')
@@ -219,5 +222,36 @@ def create_app(test_config=None):
     Create error handlers for all expected errors
     including 404 and 422.
     """
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            'success': False,
+            'error': 400,
+            'message': 'Bad request'
+        }), 400
+    
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+            'success': False,
+            'error': 404,
+            'message': 'Resource not found'
+        }), 404
+
+    @app.errorhandler(422)
+    def unprocessable_entity(error):
+        return jsonify({
+            'success': False,
+            'error': 422,
+            'message': 'Unprocessable entity'
+        }), 422
+    
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return jsonify({
+            'success': False,
+            'error': 500,
+            'message': 'Internal server error'
+        }), 500
 
     return app
