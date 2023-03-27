@@ -117,3 +117,58 @@
     "total_questions": 10,
     "current_category": None
     }
+
+### 6. GET /categories/{category_id}/questions
+
+- Description: Fetches questions that belong to the specified category.
+
+- Request Parameters:  `category_id` - The ID of the category.
+
+- Response Body:
+  ```json
+    {
+    "success": True,
+    "questions": [
+        {
+        "id": 1,
+        "question": "Example question",
+        "answer": "Example answer",
+        "category": 1,
+        "difficulty": 2
+        },
+        ...
+    ],
+    "total_questions": 10,
+    "current_category": "Science"
+    }
+
+
+
+### 7. POST /quizzes
+
+- Description: Fetches a random question for a quiz. This endpoint takes the category and previous question parameters and returns a random question within the given category (if provided) and that is not one of the previous questions.
+
+- Request Body:
+  ```json
+    {
+    "previous_questions": [1, 2, 3],
+    "quiz_category": {
+        "type": "Science",
+        "id": 1
+    }
+    }
+
+
+- Response Body:
+  ```json
+    {
+    "success": True,
+    "question": {
+        "id": 4,
+        "question": "Example question",
+        "answer": "Example answer",
+        "category": 1,
+        "difficulty": 2
+    }
+    }
+
