@@ -90,7 +90,7 @@
   "created": 1
   }
 
-### 5. POST /questions/search
+### 5. POST /questions/search
 
 - Description: Searches for questions that contain the specified search term.
 
