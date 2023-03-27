@@ -19,7 +19,7 @@
     }
   }
 
-### 1. GET /questions
+### 2. GET /questions
 
 - Description: Fetches a paginated list of questions, total number of questions, current category, and all categories.
 
@@ -50,6 +50,70 @@
     "4": "History",
     "5": "Entertainment",
     "6": "Sports"
-  },
+    },
   "current_category": None
   }
+
+### 3. DELETE /questions/{question_id}
+
+- Description: Deletes a question using a question ID.
+
+- Request Parameters: question_id - The ID of the question to be deleted.
+
+- Response Body:
+
+  ```json
+  {
+  "success": True,
+  "deleted": 1
+  }
+
+### 4. POST /questions
+
+- Description: Creates a new question with the specified question text, answer text, category, and difficulty score.
+
+- Request Body:
+
+  ```json
+  {
+    "question": "Example question",
+    "answer": "Example answer",
+    "category": 1,
+    "difficulty": 2
+  }
+
+- Response Body:
+
+  ```json
+  {
+  "success": True,
+  "created": 1
+  }
+
+### 5. POST /questions/search
+
+- Description: Searches for questions that contain the specified search term.
+
+- Request Body:
+  ```json
+  {
+    "searchTerm": "example"
+  }
+
+- Response Body:
+  ```json
+    {
+    "success": True,
+    "questions": [
+        {
+        "id": 1,
+        "question": "Example question",
+        "answer": "Example answer",
+        "category": 1,
+        "difficulty": 2
+        },
+        ...
+    ],
+    "total_questions": 10,
+    "current_category": None
+    }
