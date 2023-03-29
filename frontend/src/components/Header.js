@@ -14,7 +14,7 @@ class Header extends Component {
             this.navTo('');
           }}
         >
-          Udacitrivia
+          Trivia App
         </h1>
         <h2
           onClick={() => {
