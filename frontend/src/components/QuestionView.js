@@ -31,6 +31,7 @@ class QuestionView extends Component {
           categories: result.categories,
           currentCategory: result.current_category,
         });
+        console.log(result)
         return;
       },
       error: (error) => {

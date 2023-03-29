@@ -69,6 +69,103 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['created'])
 
+    def test_get_categories_failure(self):
+        response = self.client().get('/categories/1000')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource not found')
+
+    def test_get_paginated_questions_failure(self):
+        response = self.client().get('/questions?page=1000')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource not found')
+
+    def test_delete_question_failure(self):
+        response = self.client().delete('/questions/1000')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource not found')
+
+    def test_create_new_question_failure(self):
+        new_question = {
+            'question': '',
+            'answer': '',
+            'difficulty': 1,
+            'category': 1
+        }
+        response = self.client().post('/questions', json=new_question)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unprocessable entity')
+
+    def test_search_questions_success(self):
+        search_term = {'searchTerm': 'title'}
+        response = self.client().post('/questions/search', json=search_term)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['questions']) > 0)
+
+    def test_search_questions_failure(self):
+        search_term = {'searchTerm': ''}
+        response = self.client().post('/questions/search', json=search_term)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unprocessable entity')
+
+    def test_retrieve_questions_based_on_category_success(self):
+        response = self.client().get('/categories/1/questions')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['questions'])
+        self.assertTrue(data['total_questions'])
+
+    def test_retrieve_questions_based_on_category_failure(self):
+        response = self.client().get('/categories/1000/questions')
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource not found')
+
+    def test_play_quiz_success(self):
+        quiz_data = {
+            'previous_questions': [],
+            'quiz_category': {'type': 'Science', 'id': 1}
+        }
+        response = self.client().post('/quizzes', json=quiz_data)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['question'])
+
+    def test_play_quiz_failure(self):
+        quiz_data = {
+            'previous_questions': [],
+        }
+        response = self.client().post('/quizzes', json=quiz_data)
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Unprocessable entity')
+
+
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()

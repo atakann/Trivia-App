@@ -111,6 +111,9 @@ def create_app(test_config=None):
         body = request.get_json()
         if not ('question' in body and 'answer' in body and 'difficulty' in body and 'category' in body):
             abort(422)
+
+        if body.get('question').strip() == '' or body.get('answer').strip() == '':
+            abort(422)
         
         new_question = Question(
             question=body.get('question'),
@@ -160,7 +163,7 @@ def create_app(test_config=None):
         if category is None:
             abort(404)
         
-        questions = Question.query.filter_by(category=category_id)
+        questions = Question.query.filter_by(category=category_id).all()
         formatted_questions = [question.format() for question in questions]
 
         return jsonify({
